@@ -3,26 +3,33 @@
 # in order to use, the volume beyond the region you are testing, must be set to have a name of graveyard.
 
 #import dagmc
-from pydagmc import dagmc
+from pydagmc import dagmc #import dagmc
+import time # import system time
+import random #import random number generator
+import math # import math library
+import source_functions # import source functions
+import andy_geom_functions # import lost particle checker
+import sys #gets command line arguments
 
-# import time
-import time
 
-#import random number generator
-import random
+input_file=str(sys.argv[1])
 
-# import math library
-import math
+print '++++++++++++++++++++++++++++++++++'
+print '+  PyDagMC lost particle tool    +'
+print '++++++++++++++++++++++++++++++++++'
 
-# import source functions
-import source_functions
+try:
+   with open(input_file) as f: pass
+except IOError as e:
+   print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+   print 'File ',input_file,' does not exist'
+   print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+   exit()
 
-# import lost particle checker
-import andy_geom_functions
 
-#load geometry file
 
-dagmc.load('watertight_out.h5m')
+dagmc.load(input_file) #load geometry file
+
 #dagmc.load('divertor_merged.h5m')
 
 # find out where pos is
@@ -68,6 +75,7 @@ for i in range(1,nps):
          num_lost +=1
 # call dump2vtk, which takes the current ray history and prints it in nice format
          andy_geom_functions.dump_2_vtk(pos,positions,num_lost)
+         andy_geom_functions.extrapolate_ray(pos,positoins,num_lost,200.0)
 
 print 'done'
 
